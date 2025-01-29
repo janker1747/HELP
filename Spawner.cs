@@ -5,10 +5,14 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private Cube _prefab;
-
-    public event Action<GameObject> notSpawn;
-
+    public Action OnNotSpawn;
     private static float _currentChance = 100f;
+    private Explosion _explosion;
+
+    private void Awake()
+    {
+        _explosion = GetComponent<Explosion>();
+    }
 
     private void OnEnable()
     {
@@ -22,6 +26,7 @@ public class Spawner : MonoBehaviour
 
     private void OnCubeDestroyed(Cube destroyedCube)
     {
+        destroyedCube.Destroyed -= OnCubeDestroyed;
         SpawnChance(destroyedCube.gameObject);
     }
 
@@ -39,7 +44,7 @@ public class Spawner : MonoBehaviour
         }
         else
         {
-            notSpawn?.Invoke(destroedCube);
+            _explosion.Explode(destroedCube.transform.position);
         }
     }
 
@@ -58,10 +63,11 @@ public class Spawner : MonoBehaviour
 
     private void CreateObject()
     {
-        Cube newCube = Instantiate(_prefab, transform.position = _prefab.transform.position + Vector3.up, Quaternion.identity);
-        newCube.transform.localScale = _prefab.transform.localScale / 2;
+        Cube cube = Instantiate(_prefab, _prefab.transform.position + Vector3.up, Quaternion.identity);
+        cube.transform.localScale = _prefab.transform.localScale / 2;
+        cube.Destroyed += OnCubeDestroyed;
 
-        ChangeColors(newCube.gameObject);
+        ChangeColors(cube.gameObject);
     }
 
     private void ChangeColors(GameObject cube)

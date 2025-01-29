@@ -5,33 +5,14 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    private float _radius = 1000f;
-    public float _forse = 1000f;
-    private Spawner _spawner;
+    [SerializeField] private GameObject explosionEffectPrefab;
+    private float _radius = 100f;
+    public float _forse = 500f;
 
-    private void Start()
+    public void Explode(Vector3 explosionPosition)
     {
-        _spawner = GetComponent<Spawner>();
-    }
+        Instantiate(explosionEffectPrefab, explosionPosition, Quaternion.identity);
 
-    private void OnEnable()
-    {
-        if (_spawner != null)
-        {
-            _spawner.OnNotSpawn += Explode;
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (_spawner != null)
-        {
-            _spawner.OnNotSpawn -= Explode;
-        }
-    }
-
-    public void Explode()
-    {
         Collider[] colliders = Physics.OverlapSphere(transform.position, _radius);
 
         for (int i = 0; i < colliders.Length; i++)
@@ -40,7 +21,7 @@ public class Explosion : MonoBehaviour
 
             if (rigidbody != null)
             {
-                rigidbody.AddExplosionForce(_forse, transform.position, _radius);
+                rigidbody.AddExplosionForce(_forse, explosionPosition, _radius);
             }
         }
     }

@@ -10,12 +10,6 @@ public class Cube : MonoBehaviour
     public void OnClick()
     {
         Destroyed?.Invoke(this);
-
-        if (_explosion != null)
-        {
-            _explosion.Explode();
-        }
-
         Destroy(gameObject);
     }
 }
