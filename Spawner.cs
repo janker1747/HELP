@@ -5,9 +5,9 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private Cube _prefab;
-    public Action OnNotSpawn;
     private static float _currentChance = 100f;
     private Explosion _explosion;
+    private ChangeColor _color;
 
     private void Awake()
     {
@@ -26,14 +26,15 @@ public class Spawner : MonoBehaviour
 
     private void OnCubeDestroyed(Cube destroyedCube)
     {
-        destroyedCube.Destroyed -= OnCubeDestroyed;
-        SpawnChance(destroyedCube.gameObject);
+        SpawnChance(destroyedCube);
     }
 
-    private void SpawnChance(GameObject destroedCube)
+    private void SpawnChance(Cube destroyedCube)
     {
+        destroyedCube.Destroyed -= OnCubeDestroyed;
+
         float minValue = 0;
-        float maxValue = 100;
+        float maxValue = 101;
         float randomValue = UnityEngine.Random.Range(minValue, maxValue);
 
         if (randomValue < _currentChance)
@@ -44,7 +45,7 @@ public class Spawner : MonoBehaviour
         }
         else
         {
-            _explosion.Explode(destroedCube.transform.position);
+            _explosion.Explode(destroyedCube.transform.position);
         }
     }
 
@@ -67,16 +68,6 @@ public class Spawner : MonoBehaviour
         cube.transform.localScale = _prefab.transform.localScale / 2;
         cube.Destroyed += OnCubeDestroyed;
 
-        ChangeColors(cube.gameObject);
-    }
-
-    private void ChangeColors(GameObject cube)
-    {
-        MeshRenderer renderer = cube.GetComponent<MeshRenderer>();
-
-        if (renderer != null)
-        {
-            renderer.material.color = UnityEngine.Random.ColorHSV();
-        }
+        _color.ChangeColors(cube.gameObject);
     }
 }

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    [SerializeField] private GameObject explosionEffectPrefab;
+    [SerializeField] private Cube explosionEffectPrefab;
     private float _radius = 100f;
-    public float _forse = 500f;
+    private float _force = 500f;
 
     public void Explode(Vector3 explosionPosition)
     {
@@ -21,7 +21,7 @@ public class Explosion : MonoBehaviour
 
             if (rigidbody != null)
             {
-                rigidbody.AddExplosionForce(_forse, explosionPosition, _radius);
+                rigidbody.AddExplosionForce(_force, explosionPosition, _radius);
             }
         }
     }
