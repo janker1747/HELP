@@ -4,7 +4,24 @@ using UnityEngine;
 
 public class ChangeColor : MonoBehaviour
 {
-    public void ChangeColors(GameObject cube)
+    private Spawner _spawner;
+
+    private void Awake()
+    {
+        _spawner = GetComponent<Spawner>();
+    }
+
+    private void OnEnable()
+    {
+        _spawner.Change += ChangeColors;
+    }
+
+    private void OnDisable()
+    {
+        _spawner.Change -= ChangeColors;
+    }
+
+    public void ChangeColors(Cube cube)
     {
         MeshRenderer renderer = cube.GetComponent<MeshRenderer>();
 

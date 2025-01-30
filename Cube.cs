@@ -5,10 +5,10 @@ using UnityEngine;
 public class Cube : MonoBehaviour
 {
     public event Action<Cube> Destroyed;
-    public Explosion _explosion;
 
     public void OnClick()
     {
+        Vector3 position = transform.position;
         Destroyed?.Invoke(this);
         Destroy(gameObject);
     }

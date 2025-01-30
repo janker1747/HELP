@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    [SerializeField] private Cube explosionEffectPrefab;
+    [SerializeField] private GameObject explosionEffectPrefab;
     private float _radius = 100f;
     private float _force = 500f;
 
